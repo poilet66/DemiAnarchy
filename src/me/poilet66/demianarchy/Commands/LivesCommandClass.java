@@ -1,5 +1,6 @@
-package me.poilet66.demianarchy;
+package me.poilet66.demianarchy.Commands;
 
+import me.poilet66.demianarchy.DemiAnarchy;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -9,7 +10,7 @@ import org.bukkit.entity.Player;
 
 public class LivesCommandClass implements CommandExecutor {
 
-    private DemiAnarchy main;
+    private final DemiAnarchy main;
 
     public LivesCommandClass(DemiAnarchy main) {
         this.main = main;

@@ -1,5 +1,6 @@
 package me.poilet66.demianarchy;
 
+import org.bukkit.Location;
 import org.bukkit.plugin.Plugin;
 
 import java.io.*;
@@ -9,7 +10,8 @@ import java.util.UUID;
 public class PlayerLivesManager {
 
     private HashMap<UUID, Integer> livesMap;
-    private Plugin main;
+    private HashMap<UUID, Location> deadPlayersLocMap;
+    private final Plugin main;
 
     public PlayerLivesManager(Plugin main) {
         this.main = main;
@@ -23,15 +25,34 @@ public class PlayerLivesManager {
         if(livesMap == null) {
             livesMap = new HashMap<UUID, Integer>();
         }
+        deadPlayersLocMap = (HashMap<UUID, Location>) load(new File(main.getDataFolder(), "deadPlayers.dat"));
+        if(deadPlayersLocMap == null) {
+            deadPlayersLocMap = new HashMap<UUID, Location>();
+        }
     }
 
-    public void decrementPlayerLife(UUID player) {
+
+    /**
+     *
+     * @param player
+     * @return true if player has no more lives
+     */
+    public boolean decrementPlayerLife(UUID player) {
         if(livesMap.containsKey(player)) {
-            if(livesMap.get(player) > 0) {
+            if(livesMap.get(player) > 1) {
                 int lives = livesMap.get(player);
                 livesMap.put(player, lives-1);
+                return false;
             }
+            else if(livesMap.get(player) == 1) {
+                int lives = livesMap.get(player);
+                livesMap.put(player, lives-1);
+                deadPlayersLocMap.put(player, main.getServer().getPlayer(player).getLocation());
+            }
+            //if have 0 lives will just skip to here, will still tp back and stuff just wont decrement life or set a new dead location
+            return true;
         }
+        return false;
     }
 
     public void addPlayerLife(UUID player) {
@@ -43,6 +64,9 @@ public class PlayerLivesManager {
 
     public void setPlayerLife(UUID player, int amount) {
         if(livesMap.containsKey(player)) {
+            if(amount > 0 && deadPlayersLocMap.containsKey(player)) {
+                deadPlayersLocMap.remove(player);
+            }
             livesMap.put(player, amount);
         }
     }
@@ -54,6 +78,8 @@ public class PlayerLivesManager {
     public HashMap<UUID, Integer> getLivesMap() {
         return livesMap;
     }
+
+    public HashMap<UUID, Location> getDeadPlayersLocMap() { return deadPlayersLocMap; }
 
     public void save(Object o, File f) {
         try{

@@ -1,2 +1,6 @@
 #Default amount of lives a new player starts with
 defaultLives: 3
+#How often timerTask should repeat
+timerRepeat: 20
+#Distance from deathpoint dead players can travel
+deathRadius: 5
