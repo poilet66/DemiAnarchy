@@ -1,5 +1,5 @@
 # DemiAnarchy
 Plugin commissioned for 1.16.5 minecraft server
 
-Permission Nodes:
+<h2>Permission Nodes:<h2>
 demianarchy.lives.set - allows user to set player life amount
