@@ -1,15 +1,19 @@
 package me.poilet66.demianarchy;
 
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.plugin.Plugin;
 
 import java.io.*;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 public class PlayerLivesManager {
 
     private HashMap<UUID, Integer> livesMap;
+    private Set<UUID> deadPlayers;
     private HashMap<UUID, Location> deadPlayersLocMap;
     private final Plugin main;
 
@@ -25,10 +29,11 @@ public class PlayerLivesManager {
         if(livesMap == null) {
             livesMap = new HashMap<UUID, Integer>();
         }
-        deadPlayersLocMap = (HashMap<UUID, Location>) load(new File(main.getDataFolder(), "deadPlayers.dat"));
-        if(deadPlayersLocMap == null) {
-            deadPlayersLocMap = new HashMap<UUID, Location>();
+        deadPlayers = (Set<UUID>) load(new File(main.getDataFolder(), "deadPlayers.dat"));
+        if(deadPlayers == null) {
+            deadPlayers = new HashSet<UUID>();
         }
+        deadPlayersLocMap = new HashMap<UUID, Location>();
     }
 
 
@@ -66,6 +71,7 @@ public class PlayerLivesManager {
         if(livesMap.containsKey(player)) {
             if(amount > 0 && deadPlayersLocMap.containsKey(player)) {
                 deadPlayersLocMap.remove(player);
+                main.getServer().getPlayer(player).setGameMode(GameMode.SURVIVAL);
             }
             livesMap.put(player, amount);
         }
@@ -80,6 +86,16 @@ public class PlayerLivesManager {
     }
 
     public HashMap<UUID, Location> getDeadPlayersLocMap() { return deadPlayersLocMap; }
+
+    public Set<UUID> getDeadPlayers() {
+        return deadPlayers;
+    }
+
+    public void prepareDeadPlayerSave() {
+        for(UUID player : deadPlayersLocMap.keySet()) {
+            deadPlayers.add(player);
+        }
+    }
 
     public void save(Object o, File f) {
         try{

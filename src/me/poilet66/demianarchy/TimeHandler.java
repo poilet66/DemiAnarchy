@@ -26,9 +26,11 @@ public class TimeHandler {
             public void run() {
                 for(UUID playerUUID : main.getPLM().getDeadPlayersLocMap().keySet()) {
                     Player player = main.getServer().getPlayer(playerUUID);
-                    if(Math.abs(Utils.getPointDistanceFromPlayer(player, main.getPLM().getDeadPlayersLocMap().get(playerUUID))) >= main.getConfig().getDouble("deathRadius")) {
-                        player.teleport(main.getPLM().getDeadPlayersLocMap().get(playerUUID));
-                        player.sendMessage(ChatColor.RED + "You strayed too far from your death point.");
+                    if(player != null) { //if online
+                        if(Math.abs(Utils.getPointDistanceFromPlayer(player, main.getPLM().getDeadPlayersLocMap().get(playerUUID))) >= main.getConfig().getDouble("deathRadius")) {
+                            player.teleport(main.getPLM().getDeadPlayersLocMap().get(playerUUID));
+                            player.sendMessage(ChatColor.RED + "You strayed too far from your death point.");
+                        }
                     }
                 }
             }

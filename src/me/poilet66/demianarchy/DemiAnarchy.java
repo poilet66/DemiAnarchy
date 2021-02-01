@@ -24,7 +24,8 @@ public class DemiAnarchy extends JavaPlugin {
     @Override
     public void onDisable() {
         PLM.save(PLM.getLivesMap(), new File(getDataFolder(), "livesMap.dat"));
-        PLM.save(PLM.getDeadPlayersLocMap(), new File(getDataFolder(), "deadPlayers.dat"));
+        PLM.prepareDeadPlayerSave();
+        PLM.save(PLM.getDeadPlayers(), new File(getDataFolder(), "deadPlayers.dat"));
     }
 
     public PlayerLivesManager getPLM() {
