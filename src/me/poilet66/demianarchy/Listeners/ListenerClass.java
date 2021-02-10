@@ -13,7 +13,6 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
-import org.bukkit.scheduler.BukkitScheduler;
 
 public class ListenerClass implements Listener {
 
@@ -39,7 +38,7 @@ public class ListenerClass implements Listener {
                 return;
             }
             killer.sendMessage(ChatColor.GREEN + "You stole a life from your victim.");
-            PLM.getLivesMap().put(killer.getUniqueId(), PLM.getLivesMap().get(killer.getUniqueId())+1);
+            PLM.setPlayerLife(killer.getUniqueId(), PLM.getLivesMap().get(killer.getUniqueId())+1);
         }
     }
 
@@ -81,7 +80,7 @@ public class ListenerClass implements Listener {
     public void onPlayerRespawn(PlayerRespawnEvent event) {
         if(PLM.getDeadPlayersLocMap().containsKey(event.getPlayer().getUniqueId())) {
             event.setRespawnLocation(PLM.getDeadPlayersLocMap().get(event.getPlayer().getUniqueId()));
-            event.getPlayer().sendMessage("Teleporting back to death point");
+            event.getPlayer().sendMessage(ChatColor.GOLD + "Teleporting back to death point");
         }
     }
 

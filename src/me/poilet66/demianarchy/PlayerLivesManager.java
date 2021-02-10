@@ -62,8 +62,11 @@ public class PlayerLivesManager {
 
     public void addPlayerLife(UUID player) {
         if(livesMap.containsKey(player)) {
-            int lives = livesMap.get(player);
-            livesMap.put(player, lives+1);
+            if(deadPlayersLocMap.containsKey(player)) {
+                deadPlayersLocMap.remove(player);
+                main.getServer().getPlayer(player).setGameMode(GameMode.SURVIVAL);
+            }
+            livesMap.put(player, livesMap.get(player)+1);
         }
     }
 

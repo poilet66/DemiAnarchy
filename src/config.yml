@@ -4,3 +4,5 @@ defaultLives: 3
 timerRepeat: 20
 #Distance from deathpoint dead players can travel
 deathRadius: 5
+#Radius of royale world
+royaleRadius: 1000

@@ -6,3 +6,6 @@ commands:
   lives:
     description: See how many lives you have
     usage: /<command>
+  royale:
+    description: Starts a battle royale in the given amount of minutes.
+    usage: /<command>
