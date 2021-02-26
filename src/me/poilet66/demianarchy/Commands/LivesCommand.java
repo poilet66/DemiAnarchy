@@ -8,11 +8,11 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class LivesCommandClass implements CommandExecutor {
+public class LivesCommand implements CommandExecutor {
 
     private final DemiAnarchy main;
 
-    public LivesCommandClass(DemiAnarchy main) {
+    public LivesCommand(DemiAnarchy main) {
         this.main = main;
     }
 
@@ -21,14 +21,14 @@ public class LivesCommandClass implements CommandExecutor {
             if(sender instanceof Player) {
                 Player player = (Player) sender;
                 if(!main.getPLM().getLivesMap().containsKey(player.getUniqueId())) {
-                    player.sendMessage(ChatColor.RED + "Error retrieving lives.");
+                    player.sendMessage(main.prefix + ChatColor.RED + "Error retrieving lives.");
                     return true;
                 }
                 if(main.getPLM().getLivesMap().get(player.getUniqueId()) <= 0) {
-                    player.sendMessage(String.format(ChatColor.GREEN + "You have " + ChatColor.RED + "%d" + ChatColor.GREEN + " lives.", main.getPLM().getLivesMap().get(player.getUniqueId())));
+                    player.sendMessage(String.format(main.prefix + ChatColor.GREEN + "You have " + ChatColor.RED + "%d" + ChatColor.GREEN + " lives.", main.getPLM().getLivesMap().get(player.getUniqueId())));
                     return true;
                 }
-                player.sendMessage(String.format(ChatColor.GREEN + "You have %d lives.", main.getPLM().getLivesMap().get(player.getUniqueId())));
+                player.sendMessage(String.format(main.prefix + ChatColor.GREEN + "You have %d lives.", main.getPLM().getLivesMap().get(player.getUniqueId())));
                 return true;
             }
         }

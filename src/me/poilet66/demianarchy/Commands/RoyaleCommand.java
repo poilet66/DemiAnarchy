@@ -31,7 +31,7 @@ public class RoyaleCommand implements CommandExecutor {
                 int minutesToStart = Integer.parseInt(args[1]);
                 sender.sendMessage(String.format(ChatColor.DARK_AQUA + "Royale scheduled for %s minutes time.", args[1]));
 
-                Countdown countdown = new Countdown(minutesToStart, 3, main) {
+                Countdown countdown = new Countdown(minutesToStart, 20, main) {
 
                     @Override
                     public void count(int current) {
