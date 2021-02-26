@@ -47,7 +47,7 @@ public class LivesCommand implements CommandExecutor {
             }
             try {
                 main.getPLM().setPlayerLife(Bukkit.getPlayer(args[1]).getUniqueId(), Integer.parseInt(args[2]));
-                sender.sendMessage(String.format(ChatColor.GREEN + "Set %s to %s lives.", args[1], args[2]));
+                sender.sendMessage(String.format(main.prefix + ChatColor.GREEN + "Set %s to %s lives.", args[1], args[2]));
             } catch (NumberFormatException NFE) {
                 sender.sendMessage(ChatColor.RED + "The amount you have entered is not a number.");
             } catch (Exception e) {
