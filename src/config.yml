@@ -5,4 +5,10 @@ timerRepeat: 20
 #Distance from deathpoint dead players can travel
 deathRadius: 5
 #Radius of royale world
-royaleRadius: 1000
+royaleMaxRadius: 1000
+#Radius border will shrink to
+royaleMinRadius: 900
+#Minutes it will take to shrink
+royaleShrinkMinutes: 5
+#Minutes before it will shrink
+royaleStartMins: 5

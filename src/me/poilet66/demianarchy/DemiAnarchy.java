@@ -42,7 +42,6 @@ public class DemiAnarchy extends JavaPlugin {
     }
 
     public void loadConfig() {
-        getConfig().options().copyDefaults(true);
-        saveConfig();
+        saveDefaultConfig();
     }
 }

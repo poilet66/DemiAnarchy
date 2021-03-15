@@ -13,6 +13,7 @@ import java.util.Set;
 public class Royale {
 
     private final DemiAnarchy main;
+    private final static double PI = 3.1415;
     private Set<Player> players;
     Random rnd = new Random();
 
@@ -38,11 +39,16 @@ public class Royale {
         for(Player player : main.getServer().getOnlinePlayers()) {
             if(player.hasPermission("demianarchy.royale.avoid")) {
                 player.sendMessage(main.prefix + ChatColor.GOLD + "You avoided the royale.");
-                continue;
+                //continue;
             }
             //teleport player to random location in world
-            player.teleport(randomLocInRadius(royale, main.getConfig().getInt("royaleRadius")));
+            player.teleport(randomLocWithinBothRadius(royale, main.getConfig().getInt("royaleMaxRadius"), main.getConfig().getInt("royaleMinRadius")));
+            player.sendMessage(main.prefix + ChatColor.BLUE + "The border will begin to shrink in " + ChatColor.GOLD + main.getConfig().getInt("royaleStartMins") + ChatColor.BLUE + " minutes.");
         }
+
+        //setup border
+        setupWorldBorder(royale, main.getConfig().getInt("royaleMaxRadius"), main.getConfig().getInt("royaleMinRadius"), main.getConfig().getInt("royaleShrinkMinutes") * 60);
+
     }
 
     //ends the battle royale
@@ -71,6 +77,40 @@ public class Royale {
         ret.setZ(rnd.nextInt(radius*2)-radius);
         ret.setY(ret.getWorld().getHighestBlockYAt(ret.getBlockX(), ret.getBlockZ()));
         return ret;
+    }
+
+    private Location randomLocWithinBothRadius(World world, int highRad, int lowRad) {
+
+        //square coord
+        double a = Math.random() * 2 * PI;
+        double r = Math.sqrt(lowRad * lowRad + Math.random() * (highRad * highRad - lowRad * lowRad)) / Math.max(Math.abs(Math.cos(a)), Math.abs(Math.sin(a)));
+
+        //cartesian coord
+        int X = (int) (r * Math.sin(a));
+        int Z = (int) (r * Math.cos(a));
+
+        //build location
+        Location ret = new Location(world, 0, 0,0);
+        ret.setX(X);
+        ret.setZ(Z);
+        ret.setY(ret.getWorld().getHighestBlockYAt(ret.getBlockX(), ret.getBlockZ()));
+
+        return ret;
+    }
+
+    private void setupWorldBorder(World world, int radius1, final int radius2, final int secondsFromTo) {
+        final WorldBorder border = world.getWorldBorder();
+        border.setCenter(0D, 0D);
+        border.setSize((radius1 + 1) * 2);
+        Bukkit.getScheduler().scheduleSyncDelayedTask(main, new Runnable() {
+            public void run() {
+                border.setSize(radius2, secondsFromTo);
+                for(Player player : Bukkit.getOnlinePlayers()) {
+                    player.sendMessage(main.prefix + ChatColor.BLUE + "The border is beginning to shrink!");
+                }
+            }
+        }, 60L * 20 * main.getConfig().getInt("royaleStartMins"));
+
     }
 
     //TODO: Shrinking border, when border hits minimum radius, make it move around in random directions to keep players mobile

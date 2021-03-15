@@ -51,7 +51,7 @@ public class LivesCommand implements CommandExecutor {
             } catch (NumberFormatException NFE) {
                 sender.sendMessage(ChatColor.RED + "The amount you have entered is not a number.");
             } catch (Exception e) {
-                sender.sendMessage(ChatColor.RED + "Something went wrong! Contact and admin.");
+                sender.sendMessage(ChatColor.RED + "Something went wrong! Contact an admin.");
                 e.printStackTrace();
             }
             return true;
