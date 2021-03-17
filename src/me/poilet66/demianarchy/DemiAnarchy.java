@@ -13,12 +13,14 @@ public class DemiAnarchy extends JavaPlugin {
     public final static String prefix = ChatColor.GRAY + "[" + ChatColor.GOLD + "DemiAnarchy" + ChatColor.GRAY + "] ";
 
     private PlayerLivesManager PLM;
+    private RoyaleManager RM;
     private TimeHandler TH;
 
     @Override
     public void onEnable() {
         loadConfig();
         this.PLM = new PlayerLivesManager(this);
+        this.RM = new RoyaleManager(this);
         getServer().getPluginManager().registerEvents(new ListenerClass(this), this);
         getCommand("lives").setExecutor(new LivesCommand(this));
         getCommand("royale").setExecutor(new RoyaleCommand(this));
@@ -39,6 +41,10 @@ public class DemiAnarchy extends JavaPlugin {
 
     public TimeHandler getTH() {
         return TH;
+    }
+
+    public RoyaleManager getRM() {
+        return RM;
     }
 
     public void loadConfig() {

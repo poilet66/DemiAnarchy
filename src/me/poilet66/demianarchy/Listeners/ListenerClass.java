@@ -10,9 +10,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.event.player.PlayerRespawnEvent;
+import org.bukkit.event.player.*;
 
 public class ListenerClass implements Listener {
 
@@ -29,6 +27,13 @@ public class ListenerClass implements Listener {
         if(event.getEntity().getKiller() instanceof Player) {
             Player killer = event.getEntity().getKiller();
             Player victim = event.getEntity();
+            if(main.getRM().getRoyale() != null) {
+                if(main.getRM().getRoyale().getPlayers().contains(victim)) {
+                    killer.sendMessage(main.prefix + ChatColor.RED + "Life consumption is disabled during Royale, you gained no lives.");
+                    victim.sendMessage(main.prefix + ChatColor.RED + "Life consumption is disabled during Royale, you lost no lives.");
+                    return;
+                }
+            }
             if(!PLM.getLivesMap().containsKey(killer.getUniqueId()) || !PLM.getLivesMap().containsKey(victim.getUniqueId())) {
                 killer.sendMessage(ChatColor.RED + "You weren't able to steal a life as an error occurred.");
                 return;
@@ -44,6 +49,12 @@ public class ListenerClass implements Listener {
 
     @EventHandler(priority = EventPriority.LOW)
     public void onPlayerDeath(final PlayerDeathEvent event) {
+        if(main.getRM().getRoyale() != null) {
+            if(main.getRM().getRoyale().getPlayers().contains(event.getEntity())) {
+                main.getRM().getRoyale().removePlayer(event.getEntity());
+                return;
+            }
+        }
         Bukkit.getScheduler().scheduleSyncDelayedTask(main, new Runnable() { //to make it run after other players get lives
             public void run() {
                 if(PLM.decrementPlayerLife(event.getEntity().getUniqueId())) {
@@ -84,4 +95,22 @@ public class ListenerClass implements Listener {
         }
     }
 
+    @EventHandler
+    public void onPlayerNetherTeleport(PlayerPortalEvent event) {
+        if(event.getPlayer().getWorld().getName().equals("royale")) {
+            event.getPlayer().sendMessage(main.prefix + ChatColor.RED + "Portals are disabled during Royale.");
+            event.setCancelled(true);
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGH)
+    public void onPlayerTeleport(PlayerTeleportEvent event) {
+        if(main.getRM().getRoyale() != null) {
+            if(main.getRM().getRoyale().getPlayers().contains(event.getPlayer())) {
+                if(event.getTo().getWorld().getName().equals("royale")) {
+                    main.getRM().getRoyale().removePlayer(event.getPlayer());
+                }
+            }
+        }
+    }
 }

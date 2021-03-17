@@ -39,21 +39,24 @@ public class Royale {
         for(Player player : main.getServer().getOnlinePlayers()) {
             if(player.hasPermission("demianarchy.royale.avoid")) {
                 player.sendMessage(main.prefix + ChatColor.GOLD + "You avoided the royale.");
-                //continue;
+                continue;
             }
             //teleport player to random location in world
             player.teleport(randomLocWithinBothRadius(royale, main.getConfig().getInt("royaleMaxRadius"), main.getConfig().getInt("royaleMinRadius")));
             player.sendMessage(main.prefix + ChatColor.BLUE + "The border will begin to shrink in " + ChatColor.GOLD + main.getConfig().getInt("royaleStartMins") + ChatColor.BLUE + " minutes.");
+            players.add(player);
         }
 
         //setup border
         setupWorldBorder(royale, main.getConfig().getInt("royaleMaxRadius"), main.getConfig().getInt("royaleMinRadius"), main.getConfig().getInt("royaleShrinkMinutes") * 60);
 
+        //Royale manager logic
+        main.getRM().setRoyale(this);
     }
 
     //ends the battle royale
     public void finish() {
-
+        main.getRM().resetRoyale();
     }
 
     public boolean deleteWorld(File path) {
@@ -70,7 +73,6 @@ public class Royale {
         return(path.delete());
     }
 
-    //TODO: Make a 'minimum radius too so they can't spawn too close to the center of the map
     private Location randomLocInRadius(World world, int radius) {
         Location ret = new Location(world, 0, 0, 0);
         ret.setX(rnd.nextInt(radius*2)-radius);
@@ -113,7 +115,16 @@ public class Royale {
 
     }
 
-    //TODO: Shrinking border, when border hits minimum radius, make it move around in random directions to keep players mobile
+    public void removePlayer(Player player) {
+        players.remove(player);
+    }
 
+    public Set<Player> getPlayers() {
+        return players;
+    }
+
+    //TODO: Shrinking border, when border hits minimum radius, make it move around in random directions to keep players mobile
+    //TODO: Disable nether portals in the royale world
     //TODO: Give players compass that locks onto player with most kills
+    //TODO: Disable lives system in royale
 }
