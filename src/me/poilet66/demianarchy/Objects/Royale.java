@@ -42,6 +42,7 @@ public class Royale {
                 continue;
             }
             //teleport player to random location in world
+            main.getRM().addPlayerLoc(player, player.getLocation());
             player.teleport(randomLocWithinBothRadius(royale, main.getConfig().getInt("royaleMaxRadius"), main.getConfig().getInt("royaleMinRadius")));
             player.sendMessage(main.prefix + ChatColor.BLUE + "The border will begin to shrink in " + ChatColor.GOLD + main.getConfig().getInt("royaleStartMins") + ChatColor.BLUE + " minutes.");
             players.add(player);
@@ -56,6 +57,22 @@ public class Royale {
 
     //ends the battle royale
     public void finish() {
+        if(players.isEmpty()) {
+            Bukkit.broadcastMessage(main.prefix + ChatColor.BLUE + "The royale has finished, but there were no victors.");
+            return;
+        }
+        Bukkit.broadcastMessage(main.prefix + ChatColor.BLUE + "The royale has finished, the victors are:");
+        for(Player player : players) {
+            Bukkit.broadcastMessage(String.format(ChatColor.GREEN + "- " + ChatColor.GOLD + "%s", player.getName()));
+        }
+        Bukkit.getScheduler().scheduleSyncDelayedTask(main, new Runnable() { //to make it run after other players get lives
+            public void run() {
+                for(Player player : players) {
+                    players.remove(player);
+                    main.getRM().teleportPlayerToPreviousLocation(player);
+                }
+            }
+        }, 5 * 20L);
         main.getRM().resetRoyale();
     }
 
@@ -106,6 +123,9 @@ public class Royale {
         border.setSize((radius1 + 1) * 2);
         Bukkit.getScheduler().scheduleSyncDelayedTask(main, new Runnable() {
             public void run() {
+                if(!main.getRM().isRoyale) {
+                    return;
+                }
                 border.setSize(radius2, secondsFromTo);
                 for(Player player : Bukkit.getOnlinePlayers()) {
                     player.sendMessage(main.prefix + ChatColor.BLUE + "The border is beginning to shrink!");
@@ -124,7 +144,5 @@ public class Royale {
     }
 
     //TODO: Shrinking border, when border hits minimum radius, make it move around in random directions to keep players mobile
-    //TODO: Disable nether portals in the royale world
     //TODO: Give players compass that locks onto player with most kills
-    //TODO: Disable lives system in royale
 }

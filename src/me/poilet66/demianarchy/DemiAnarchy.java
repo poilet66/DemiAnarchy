@@ -1,7 +1,9 @@
 package me.poilet66.demianarchy;
 
 import me.poilet66.demianarchy.Commands.LivesCommand;
+import me.poilet66.demianarchy.Commands.LivesCommandTabComplete;
 import me.poilet66.demianarchy.Commands.RoyaleCommand;
+import me.poilet66.demianarchy.Commands.RoyaleCommandTabComplete;
 import me.poilet66.demianarchy.Listeners.ListenerClass;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -15,16 +17,18 @@ public class DemiAnarchy extends JavaPlugin {
     private PlayerLivesManager PLM;
     private RoyaleManager RM;
     private TimeHandler TH;
-
+    
     @Override
     public void onEnable() {
         loadConfig();
         this.PLM = new PlayerLivesManager(this);
         this.RM = new RoyaleManager(this);
+        this.TH = new TimeHandler(this);
         getServer().getPluginManager().registerEvents(new ListenerClass(this), this);
         getCommand("lives").setExecutor(new LivesCommand(this));
         getCommand("royale").setExecutor(new RoyaleCommand(this));
-        this.TH = new TimeHandler(this);
+        getCommand("lives").setTabCompleter(new LivesCommandTabComplete());
+        getCommand("royale").setTabCompleter(new RoyaleCommandTabComplete());
         getLogger().info("Enabled");
     }
 

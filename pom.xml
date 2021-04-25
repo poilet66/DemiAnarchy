@@ -6,19 +6,30 @@
 
     <groupId>com.github.poilet66</groupId>
     <artifactId>demianarchy</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <name>DemiAnarchy</name>
+    <description>Spigot Plugin commissioned for Foxendor#2673 on discord</description>
+    <version>1.1.0</version>
+    <author>poilet66#2795</author>
+
     <build>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <source>7</source>
-                    <target>7</target>
+                    <source>8</source>
+                    <target>8</target>
                 </configuration>
             </plugin>
         </plugins>
     </build>
+
+    <resources>
+        <resource>
+            <directory>src/resources</directory>
+            <filtering>true</filtering>
+        </resource>
+    </resources>
 
     <repositories>
         <!-- This adds the Spigot Maven repository to the build -->

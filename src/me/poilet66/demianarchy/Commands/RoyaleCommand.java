@@ -35,8 +35,9 @@ public class RoyaleCommand implements CommandExecutor {
 
                     @Override
                     public void count(int current) {
+                        current+=1;
                         for(Player player : main.getServer().getOnlinePlayers()) {
-                            player.sendMessage(String.format(main.prefix + ChatColor.BLUE + "A royale will begin in %s minutes", current+=1));
+                            player.sendMessage(String.format(main.prefix + ChatColor.BLUE + "A royale will begin in %s minutes", current));
                         }
                     }
 
@@ -55,6 +56,14 @@ public class RoyaleCommand implements CommandExecutor {
                 sender.sendMessage(ChatColor.RED + "The amount you entered is not a number.");
                 return true;
             }
+        }
+        if(args[0].equals("forcestop")) {
+            if(!main.getRM().isRoyale) {
+                sender.sendMessage(main.prefix + ChatColor.RED + "There is not currently a royale to stop");
+                return true;
+            }
+            main.getRM().getRoyale().finish();
+            return true;
         }
         sender.sendMessage(ChatColor.RED + "Please enter a valid subcommand.");
         return true;
