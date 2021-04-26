@@ -7,6 +7,8 @@ Plugin commissioned for 1.16.5 minecraft server
 /lives set <username> <amount> - allows plauer to set any user's lives
   
 /royale start <minutes> - will schedule a royale to start in x minutes time
+  
+/royale forcestop - forcestops any ongoing royale
 
 <h2>Permission Nodes:</h2>
 demianarchy.lives.set - allows user to set player life amount
