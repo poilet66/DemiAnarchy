@@ -1,6 +1,7 @@
 package me.poilet66.demianarchy.Objects;
 
 import me.poilet66.demianarchy.DemiAnarchy;
+import me.poilet66.demianarchy.Util.Utils;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 
@@ -58,12 +59,12 @@ public class Royale {
     //ends the battle royale
     public void finish() {
         if(players.isEmpty()) {
-            Bukkit.broadcastMessage(main.prefix + ChatColor.BLUE + "The royale has finished, but there were no victors.");
+            Utils.messageAll(main.prefix + ChatColor.BLUE + "The royale has finished, but there were no victors.", main);
             return;
         }
-        Bukkit.broadcastMessage(main.prefix + ChatColor.BLUE + "The royale has finished, the victors are:");
+        Utils.messageAll(main.prefix + ChatColor.BLUE + "The royale has finished, the victors are:", main);
         for(Player player : players) {
-            Bukkit.broadcastMessage(String.format(ChatColor.GREEN + "- " + ChatColor.GOLD + "%s", player.getName()));
+            Utils.messageAll(String.format(ChatColor.GREEN + "- " + ChatColor.GOLD + "%s", player.getName()), main);
         }
         Bukkit.getScheduler().scheduleSyncDelayedTask(main, new Runnable() { //to make it run after other players get lives
             public void run() {
@@ -145,4 +146,6 @@ public class Royale {
 
     //TODO: Shrinking border, when border hits minimum radius, make it move around in random directions to keep players mobile
     //TODO: Give players compass that locks onto player with most kills
+    //TODO: If die in royale go back to where they were beforehand
+    //TODO: Set everyones lives
 }
